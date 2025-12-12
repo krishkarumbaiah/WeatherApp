@@ -94,3 +94,4 @@ C:\Users\KRISH\WeatherApp\obj\Debug\net9.0\WeatherApp.pdb
 C:\Users\KRISH\WeatherApp\obj\Debug\net9.0\WeatherApp.genruntimeconfig.cache
 C:\Users\KRISH\WeatherApp\obj\Debug\net9.0\ref\WeatherApp.dll
 C:\Users\KRISH\WeatherApp\obj\Debug\net9.0\compressed\imc1z5lvkv-hz4hkrdo2e.gz
+C:\Users\KRISH\WeatherApp\obj\Debug\net9.0\WeatherApp.sourcelink.json

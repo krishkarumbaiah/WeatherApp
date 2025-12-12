@@ -45,3 +45,15 @@ HTTP	       HttpClient
 
 Note: This project includes my personal API key for evaluation purposes only.
 I rotate this key periodically.You can use your own API key if available. If the weather data does not load, please inform me.
+
+## 📸 Screenshots
+
+### 🌤 Search Weather
+![Home Page](screenshots/home.png)
+
+
+![Search Weather](screenshots/single%20city%20search.png)
+
+
+![Compare Weather](screenshots/Two%20city%20comparision.png)
+
