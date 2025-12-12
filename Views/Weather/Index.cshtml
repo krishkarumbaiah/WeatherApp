@@ -1,0 +1,528 @@
+@model WeatherApp.Models.WeatherPageViewModel
+@{
+    ViewData["Title"] = "Weather Checker";
+}
+
+<style>
+    @@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+    body {
+        font-family: 'Poppins', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    .weather-page {
+        min-height: calc(100vh - 80px);
+        background: radial-gradient(circle at top left, #a9d4e2ff 0, #4b65a2ff 40%, #1c369cff 100%);
+        color: #f9fafb;
+        padding-bottom: 40px;
+    }
+
+    .glass-card {
+        border-radius: 22px;
+        border: 1px solid rgba(148, 163, 184, 0.35);
+        background: linear-gradient(135deg, rgba(15, 23, 42, 0.85), rgba(30, 64, 175, 0.7));
+        box-shadow: 0 20px 40px rgba(15, 23, 42, 0.65);
+    }
+
+    .glass-inner {
+        background: radial-gradient(circle at top, rgba(96, 165, 250, 0.25), transparent 55%);
+        border-radius: 18px;
+        padding: 1.25rem;
+    }
+
+    .section-title {
+        font-weight: 600;
+        letter-spacing: .12em;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        color: #9ca3af;
+    }
+
+    .main-heading {
+        font-weight: 700;
+        letter-spacing: .06em;
+        text-transform: uppercase;
+        font-size: 0.9rem;
+        color: #c7d2fe;
+    }
+
+    .hero-title {
+        font-size: clamp(2.1rem, 4vw, 2.6rem);
+    }
+
+    .hero-subtitle {
+        color: #e5e7eb;
+        opacity: 0.9;
+        font-size: 0.95rem;
+    }
+
+    .pill-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.25rem 0.7rem;
+        border-radius: 999px;
+        border: 1px solid rgba(148, 163, 184, 0.5);
+        background: linear-gradient(135deg, rgba(15, 23, 42, 0.7), rgba(30, 64, 175, 0.6));
+        font-size: 0.72rem;
+        color: #e5e7eb;
+    }
+
+    .pill-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 999px;
+        background: #22c55e;
+        box-shadow: 0 0 0 5px rgba(34, 197, 94, 0.3);
+    }
+
+    .form-control {
+        border-radius: 999px;
+        border: 1px solid rgba(148, 163, 184, 0.7);
+        background: #f9fafb;          
+        color: #111827;               
+        font-size: 0.95rem;
+        padding-inline: 1.1rem;
+    }
+
+    .form-control::placeholder {
+        color: #6b7280;               
+        opacity: 1;
+    }
+
+    .form-control:focus {
+        outline: none;
+        border-color: #fbbf24;
+        box-shadow: 0 0 0 1px rgba(251, 191, 36, 0.65);
+        background: #ffffff;          
+        color: #111827;
+    }
+
+
+    .btn-primary-contrast {
+        border-radius: 999px;
+        border: none;
+        font-weight: 600;
+        letter-spacing: .04em;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        background: linear-gradient(135deg, #fbbf24, #f97316);
+        color: #111827;
+        box-shadow: 0 14px 28px rgba(248, 181, 0, 0.45);
+    }
+
+    .btn-primary-contrast:hover {
+        background: linear-gradient(135deg, #fbbf24, #ea580c);
+        color: #020617;
+        transform: translateY(-1px);
+    }
+
+    .btn-outline-light-rounded {
+        border-radius: 999px;
+        border-width: 1px;
+        font-size: 0.8rem;
+        padding-inline: 1rem;
+    }
+
+    .pill-fav {
+        background: rgba(15, 23, 42, 0.9);
+        border-radius: 999px;
+        padding: 0.25rem 0.75rem;
+        margin: 0.15rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
+        cursor: pointer;
+        border: 1px solid rgba(148, 163, 184, 0.7);
+        font-size: 0.82rem;
+        color: #e5e7eb;
+    }
+
+    .pill-fav span:first-child {
+        color: #fbbf24;
+        font-size: 0.9rem;
+    }
+
+    .pill-fav:hover {
+        background: rgba(30, 64, 175, 0.95);
+        border-color: #fbbf24;
+    }
+
+    .temp-big {
+        font-size: clamp(2.4rem, 4vw, 3rem);
+    }
+
+    .metric-label {
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: .08em;
+        color: #9ca3af;
+    }
+
+    .metric-value {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #e5e7eb;
+    }
+
+    .compare-label {
+        font-size: 0.78rem;
+        text-transform: uppercase;
+        letter-spacing: .08em;
+        color: #9ca3af;
+    }
+
+    .alert-custom {
+        border-radius: 16px;
+        border: 1px solid rgba(248, 113, 113, 0.6);
+        background: rgba(248, 113, 113, 0.12);
+        color: #fecaca;
+        font-size: 0.85rem;
+    }
+
+    @@media (max-width: 767.98px) {
+        .glass-card {
+            border-radius: 18px;
+        }
+
+        .hero-title {
+            font-size: 1.9rem;
+        }
+
+        .hero-subtitle {
+            font-size: 0.9rem;
+        }
+
+        .temp-big {
+            font-size: 2.2rem;
+        }
+    }
+</style>
+
+<div class="weather-page">
+    <div class="container py-4 py-md-5">
+        <div class="row justify-content-center mb-3 mb-md-4">
+            <div class="col-lg-10">
+                <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
+                    <div>
+                        <div class="pill-badge mb-2">
+                            <div class="pill-dot"></div>
+                            <span>Live weather · Powered by OpenWeather</span>
+                        </div>
+                        <h1 class="hero-title fw-bold mb-1">Weather Checker</h1>
+                        <p class="hero-subtitle mb-0">
+                            Search any city, compare two locations side by side, and star your favorites for quick access.
+                        </p>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row justify-content-center g-4">
+            <div class="col-lg-10">
+                <div class="glass-card p-3 p-md-4">
+                    <div class="row g-4">
+                        <!-- Left: Search + Compare -->
+                        <div class="col-md-8">
+                            <div class="glass-inner mb-3">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="section-title">Current weather</span>
+                                </div>
+
+                                <form asp-action="Search" method="post" class="row g-2">
+                                    <div class="col-12 col-md-8">
+                                        <input type="text"
+                                               id="singleCityInput"
+                                               name="city"
+                                               class="form-control"
+                                               placeholder="Type a city name, e.g. Bengaluru"
+                                               required />
+                                    </div>
+                                    <div class="col-12 col-md-4 d-grid">
+                                        <button type="submit" class="btn btn-primary-contrast">
+                                            Check Weather
+                                        </button>
+                                    </div>
+                                </form>
+
+                                @if (Model.ErrorMessage != null && Model.CurrentCity == null && Model.City1 == null && Model.City2 == null)
+                                {
+                                    <div class="alert alert-custom mt-3 mb-0">
+                                        @Model.ErrorMessage
+                                    </div>
+                                }
+
+                                @if (Model.CurrentCity != null)
+                                {
+                                    <div class="mt-4">
+                                        <div class="glass-inner">
+                                            <div class="d-flex flex-column flex-md-row align-items-center justify-content-between gap-3">
+                                                <div class="text-center text-md-start">
+                                                    <h4 class="mb-1">@Model.CurrentCity.City</h4>
+                                                    <div class="temp-big fw-semibold mb-1">
+                                                        @Model.CurrentCity.TemperatureC.ToString("0.0")°C
+                                                    </div>
+                                                    <div class="small text-uppercase text-gray-400">
+                                                        <span class="metric-label me-2">Condition</span>
+                                                        <span class="text-capitalize">@Model.CurrentCity.Condition</span>
+                                                    </div>
+                                                    <div class="mt-2 d-flex flex-wrap gap-3">
+                                                        <div>
+                                                            <div class="metric-label">Humidity</div>
+                                                            <div class="metric-value">@Model.CurrentCity.Humidity %</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                @if (!string.IsNullOrEmpty(Model.CurrentCity.IconUrl))
+                                                {
+                                                    <div class="text-center">
+                                                        <img src="@Model.CurrentCity.IconUrl" alt="icon" class="mb-2" />
+                                                        <div class="small text-gray-300">Live snapshot</div>
+                                                    </div>
+                                                }
+
+                                                <div class="text-center text-md-end">
+                                                    <button type="button"
+                                                            class="btn btn-outline-light btn-outline-light-rounded"
+                                                            onclick="saveFavorite('@Model.CurrentCity.City')">
+                                                        ★ Save city
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+
+                            <!-- Compare section -->
+                            <div class="glass-inner">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="section-title">Compare two cities</span>
+                                </div>
+
+                                <form asp-action="Compare" method="post" class="row g-2 mb-3">
+                                    <div class="col-12 col-md-4">
+                                        <input type="text"
+                                               id="city1Input"
+                                               name="city1"
+                                               class="form-control"
+                                               placeholder="City 1"
+                                               required />
+                                    </div>
+                                    <div class="col-12 col-md-4">
+                                        <input type="text"
+                                               id="city2Input"
+                                               name="city2"
+                                               class="form-control"
+                                               placeholder="City 2"
+                                               required />
+                                    </div>
+                                    <div class="col-12 col-md-4 d-grid">
+                                        <button type="submit" class="btn btn-primary-contrast">
+                                            Compare
+                                        </button>
+                                    </div>
+                                </form>
+
+                                @if (Model.ErrorMessage != null && (Model.City1 == null || Model.City2 == null))
+                                {
+                                    <div class="alert alert-custom mb-3">
+                                        @Model.ErrorMessage
+                                    </div>
+                                }
+
+                                @if (Model.City1 != null && Model.City2 != null)
+                                {
+                                    <div class="row g-3">
+                                        <div class="col-12 col-md-6">
+                                            <div class="glass-inner h-100">
+                                                <div class="text-center">
+                                                    <div class="compare-label mb-1">City one</div>
+                                                    <h5 class="mb-1">@Model.City1.City</h5>
+                                                    <div class="temp-big fw-semibold mb-1">
+                                                        @Model.City1.TemperatureC.ToString("0.0")°C
+                                                    </div>
+                                                    <div class="metric-label mb-1">Humidity</div>
+                                                    <div class="metric-value mb-1">@Model.City1.Humidity %</div>
+                                                    <div class="text-capitalize small mb-2">@Model.City1.Condition</div>
+                                                    @if (!string.IsNullOrEmpty(Model.City1.IconUrl))
+                                                    {
+                                                        <img src="@Model.City1.IconUrl" alt="icon" class="mb-2" />
+                                                    }
+                                                    <div>
+                                                        <button type="button"
+                                                                class="btn btn-outline-light btn-outline-light-rounded btn-sm"
+                                                                onclick="saveFavorite('@Model.City1.City')">
+                                                            ★ Save
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-12 col-md-6">
+                                            <div class="glass-inner h-100">
+                                                <div class="text-center">
+                                                    <div class="compare-label mb-1">City two</div>
+                                                    <h5 class="mb-1">@Model.City2.City</h5>
+                                                    <div class="temp-big fw-semibold mb-1">
+                                                        @Model.City2.TemperatureC.ToString("0.0")°C
+                                                    </div>
+                                                    <div class="metric-label mb-1">Humidity</div>
+                                                    <div class="metric-value mb-1">@Model.City2.Humidity %</div>
+                                                    <div class="text-capitalize small mb-2">@Model.City2.Condition</div>
+                                                    @if (!string.IsNullOrEmpty(Model.City2.IconUrl))
+                                                    {
+                                                        <img src="@Model.City2.IconUrl" alt="icon" class="mb-2" />
+                                                    }
+                                                    <div>
+                                                        <button type="button"
+                                                                class="btn btn-outline-light btn-outline-light-rounded btn-sm"
+                                                                onclick="saveFavorite('@Model.City2.City')">
+                                                            ★ Save
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+
+                        <!-- Right: Favorites -->
+                        <div class="col-md-4">
+                            <div class="glass-inner h-100">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="section-title">Favorite cities</span>
+                                    <button class="btn btn-outline-light btn-outline-light-rounded btn-sm"
+                                            type="button"
+                                            onclick="clearFavorites()">
+                                        Clear
+                                    </button>
+                                </div>
+                                <p class="mb-2 small text-gray-300">
+                                    Save cities you check often. Tap one to auto-fill the search & compare boxes.
+                                </p>
+                                <div id="favoritesContainer"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-center mt-4">
+                        <span class="text-gray-300 small">
+                            Built with ASP.NET Core MVC · Live data from OpenWeatherMap 
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const STORAGE_KEY = "favoriteCities";
+
+    function loadFavorites() {
+        const container = document.getElementById("favoritesContainer");
+        container.innerHTML = "";
+
+        const data = localStorage.getItem(STORAGE_KEY);
+        if (!data) {
+            container.innerHTML = "<span class='text-gray-300 small'>No favorites saved yet.</span>";
+            return;
+        }
+
+        const cities = JSON.parse(data);
+        if (!cities.length) {
+            container.innerHTML = "<span class='text-gray-300 small'>No favorites saved yet.</span>";
+            return;
+        }
+
+        cities.forEach(c => {
+            const pill = document.createElement("div");
+            pill.className = "pill-fav d-flex align-items-center";
+
+            
+            pill.onclick = () => handleFavoriteClick(c);
+
+            const star = document.createElement("span");
+            star.textContent = "★";
+
+            const text = document.createElement("span");
+            text.textContent = c;
+
+            
+            const removeBtn = document.createElement("span");
+            removeBtn.textContent = "✖";
+            removeBtn.style.marginLeft = "8px";
+            removeBtn.style.cursor = "pointer";
+            removeBtn.style.color = "#f87171"; 
+            removeBtn.style.fontSize = "0.8rem";
+            removeBtn.title = "Remove";
+
+            removeBtn.onclick = (event) => {
+                event.stopPropagation();
+                removeFavorite(c);
+            };
+
+            pill.appendChild(star);
+            pill.appendChild(text);
+            pill.appendChild(removeBtn);
+
+            container.appendChild(pill);
+        });
+
+    }
+
+    function saveFavorite(city) {
+        if (!city) return;
+        const data = localStorage.getItem(STORAGE_KEY);
+        let cities = data ? JSON.parse(data) : [];
+
+        if (!cities.includes(city)) {
+            cities.push(city);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(cities));
+            loadFavorites();
+        }
+    }
+
+        function removeFavorite(city) {
+        const data = localStorage.getItem(STORAGE_KEY);
+        if (!data) return;
+
+        let cities = JSON.parse(data);
+
+        
+        cities = cities.filter(x => x !== city);
+
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(cities));
+        loadFavorites();
+    }
+
+
+    function clearFavorites() {
+        localStorage.removeItem(STORAGE_KEY);
+        loadFavorites();
+    }
+
+    function handleFavoriteClick(city) {
+        const singleInput = document.getElementById("singleCityInput");
+        if (singleInput) {
+            singleInput.value = city;
+        }
+
+        const c1 = document.getElementById("city1Input");
+        const c2 = document.getElementById("city2Input");
+
+        if (c1 && !c1.value) {
+            c1.value = city;
+        } else if (c2 && !c2.value) {
+            c2.value = city;
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", loadFavorites);
+</script>

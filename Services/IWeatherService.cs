@@ -1,0 +1,9 @@
+using WeatherApp.Models;
+
+namespace WeatherApp.Services
+{
+    public interface IWeatherService
+    {
+        Task<CityWeatherViewModel?> GetCityWeatherAsync(string city);
+    }
+}
